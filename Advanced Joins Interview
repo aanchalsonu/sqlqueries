@@ -33,47 +33,4 @@ Sum of total submissions
 
 Sum of total accepted submissions
 
-
-WITH
-vieu AS (
-    SELECT colg.contest_id,
-           SUM(vs.total_views) AS tv,
-           SUM(vs.total_unique_views) AS tuv
-    FROM Colleges colg
-    JOIN Challenges chal
-    ON chal.college_id = colg.college_id
-    JOIN View_Stats vs
-    ON vs.challenge_id = chal.challenge_id
-    GROUP BY colg.contest_id
-),
-submission AS (
-    SELECT colg.contest_id,
-           SUM(ss.total_submissions) AS ts,
-           SUM(ss.total_accepted_submissions) AS tas
-    FROM Colleges colg
-    JOIN Challenges chal
-    ON chal.college_id = colg.college_id
-    JOIN Submission_Stats ss
-    ON ss.challenge_id = chal.challenge_id
-    GROUP BY colg.contest_id
-)
-
-SELECT cont.*,
-       s.ts, s.tas,
-       v.tv, v.tuv
-FROM Contests cont
-JOIN vieu v
-ON v.contest_id = cont.contest_id
-JOIN submission s
-ON s.contest_id = v.contest_id
-WHERE s.ts != 0 OR
-      s.tas != 0 OR
-      v.tv != 0 OR
-      v.tuv != 0
-ORDER BY cont.contest_id
-
-Sum of total views 
-
-Sum of total unique views 
-
-Similarly, we can find the sums for contests  and .
+SELECT con.contest_id, con.hacker_id, con.name, COALESCE(s.ts, 0) AS ts, COALESCE(s.tas, 0) AS tas, COALESCE(v.tv, 0) AS tv, COALESCE(v.tuv, 0) AS tuv FROM contests con JOIN ( SELECT col.contest_id, COALESCE(SUM(total_views), 0) AS tv, COALESCE(SUM(total_unique_views), 0) AS tuv FROM colleges col JOIN challenges chal ON col.college_id = chal.college_id JOIN view_stats vs ON chal.challenge_id = vs.challenge_id GROUP BY col.contest_id ) v ON con.contest_id = v.contest_id JOIN ( SELECT col.contest_id, COALESCE(SUM(total_submissions), 0) AS ts, COALESCE(SUM(total_accepted_submissions), 0) AS tas FROM colleges col JOIN challenges chal ON col.college_id = chal.college_id JOIN submission_stats ss ON chal.challenge_id = ss.challenge_id GROUP BY col.contest_id ) s ON con.contest_id = s.contest_id WHERE v.tv != 0 AND v.tuv != 0 AND s.ts != 0 AND s.tas != 0 ORDER BY con.contest_id;
