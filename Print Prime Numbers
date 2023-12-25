@@ -1,0 +1,31 @@
+Write a query to print all prime numbers less than or equal to . Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
+
+For example, the output for all prime numbers  would be:
+
+2&3&5&7
+
+
+
+DECLARE @i INT = 1
+DECLARE @j INT = 1
+DECLARE @count INT = 0
+DECLARE @out VARCHAR(MAX) = ''
+WHILE(@i<=1000)
+BEGIN
+    --*PRINT(CAST(@i AS NVARCHAR(10))+'&')
+    WHILE(@j<=@i)
+    BEGIN
+        --*PRINT('--'+CAST(@j AS NVARCHAR(10)))    
+        --**PRINT('i:'+CAST(@i AS NVARCHAR(10))+'j:'+CAST(@j AS NVARCHAR(10)))
+        IF (@i%@j = 0)
+            --**PRINT('--i:'+CAST(@i AS NVARCHAR(10))+'j:'+CAST(@j AS NVARCHAR(10)))
+            SET @count = @count + 1
+        SET @j = @j+1
+    END
+    IF (@count = 2)
+        SET @out += CAST(@i AS NVARCHAR(10))+'&'
+    SET @count = 0
+    SET @j = 1
+    SET @i = @i+1
+END
+PRINT(LEFT(@out, LEN(@out) - 1))
