@@ -1,0 +1,36 @@
+Instruction
+Write a query to return GROUCHO WILLIAMS' actor_id.
+Actor's first_name and last_name are all stored as UPPER case in our database, and the database is case sensitive.
+Table: actor 
+
+
+  col_name   | col_type
+-------------+--------------------------
+ actor_id    | integer
+ first_name  | text
+ last_name   | text
+
+Sample results
+
+
+ actor_id
+----------
+      1
+
+Expected results
+
+actor_id
+172
+
+
+
+/*
+1. For data safety, only SELECT statements are allowed
+2. Results have been capped at 200 rows
+*/
+
+
+select actor_id
+from actor
+where first_name like 'GROUCHO' and last_name like 'WILLIAMS';
+
