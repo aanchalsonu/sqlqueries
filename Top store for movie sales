@@ -1,0 +1,34 @@
+Instruction
+Write a query to return the name of the store and its manager, that generated the most sales.
+
+Table: sales_by_store 
+
+Movie sales by store
+
+
+  col_name   | col_type
+-------------+----------
+ store       | text
+ manager     | text
+ total_sales | numeric
+
+Sample results
+
+
+   store   |   manager
+-----------+--------------
+ Woodridge | Jon Stephens
+
+
+
+/*
+1. For data safety, only SELECT statements are allowed
+2. Results have been capped at 200 rows
+*/
+
+select  store,manager
+from sales_by_store
+where total_sales in
+(select max(total_sales)
+ from sales_by_store);
+
