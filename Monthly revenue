@@ -1,0 +1,52 @@
+Instruction
+
+Write a query to return the total movie rental revenue for each month.
+For Postgres: you can use EXTRACT(MONTH FROM colname) and EXTRACT(YEAR FROM colname) to extract month and year from a timestamp column.
+For Python/Pandas: you can use pandas DatetimeIndex() to extract Month and Year
+df['year'] = pd.DatetimeIndex(df['InsertedDate']).year
+Table: payment 
+
+Movie rental payment transactions table
+
+
+   col_name   | col_type
+--------------+--------------------------
+ payment_id   | integer
+ customer_id  | smallint
+ staff_id     | smallint
+ rental_id    | integer
+ amount       | numeric
+ payment_ts   | timestamp with time zone
+
+Sample results
+
+
+ year | mon |   rev
+------+-----+----------
+ 2020 |   1 |  123.45
+ 2020 |   2 |  234.56
+ 2020 |   3 |  345.67
+
+
+Expected results
+
+year	mon	rev
+2020	2	514.18
+2020	5	4683.77
+2020	6	9769.56
+2020	7	27547.88
+2020	8	24901.12
+
+
+
+
+/*
+1. For data safety, only SELECT statements are allowed
+2. Results have been capped at 200 rows
+*/
+
+
+select extract(year from payment_ts) as year , extract(month from payment_ts) as month, 
+sum(amount) as rev
+from payment
+group by year,month;
