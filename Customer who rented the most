@@ -1,0 +1,81 @@
+Instruction
+Write a query to return the first and last name of the customer who made the most rental transactions in May 2020.
+Table 1: customer 
+
+
+  col_name   | col_type
+-------------+--------------------------
+ customer_id | integer
+ store_id    | smallint
+ first_name  | text
+ last_name   | text
+ email       | text
+ address_id  | smallint
+ activebool  | boolean
+ create_date | date
+ active      | integer
+
+Table 2: rental 
+
+
+   col_name   | col_type
+--------------+--------------------------
+ rental_id    | integer
+ rental_ts    | timestamp with time zone
+ inventory_id | integer
+ customer_id  | smallint
+ return_ts    | timestamp with time zone
+ staff_id     | smallint
+
+Sample results
+
+
+ first_name | last_name
+------------+-----------
+ JENNIFER   | ANISTON
+
+
+
+
+
+/*SELECT
+  c.first_name,
+  c.last_name
+FROM
+  customer c
+JOIN
+  (
+    SELECT
+      customer_id,
+      COUNT(rental_id) AS rental_count
+    FROM
+      rental
+    WHERE
+      EXTRACT(MONTH FROM rental_ts) = 5
+      AND EXTRACT(YEAR FROM rental_ts) = 2020
+    GROUP BY
+      customer_id
+    ORDER BY
+      rental_count DESC
+    LIMIT 1
+  ) r ON c.customer_id = r.customer_id;
+
+
+
+
+
+
+*/
+
+select c.first_name,c.last_name
+from customer as c join
+(
+  select customer_id, count(rental_id) as total_rent
+  from rental
+  where extract(month from rental_ts)  = 5
+  and extract(year from rental_ts) = 2020
+  group by customer_id
+  order by total_rent desc 
+  limit 1)
+  as r on c.customer_id = r.customer_id;
+
