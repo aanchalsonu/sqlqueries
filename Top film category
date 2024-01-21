@@ -1,0 +1,40 @@
+Instruction
+Write a query to return the film category id with the most films, as well as the number films in that category.
+Table: film_category 
+
+A film can only belong to one category
+
+
+  col_name   | col_type
+-------------+--------------------------
+ film_id     | smallint
+ category_id | smallint
+
+Sample results
+
+
+category_id | film_cnt
+------------+----------
+          1 |       2
+
+Expected results
+
+category_id	film_cnt
+15	74
+
+
+
+/*
+1. For data safety, only SELECT statements are allowed
+2. Results have been capped at 200 rows
+*/
+
+
+select category_id , count(*) as film_cnt
+from film_category
+group by category_id
+order by film_cnt desc
+limit 1
+
+
+
