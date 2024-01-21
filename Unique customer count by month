@@ -1,0 +1,49 @@
+Instruction
+Write a query to return the total number of unique customers for each month
+Use EXTRACT(YEAR from ts_field) and EXTRACT(MONTH from ts_field) to get year and month from a timestamp column.
+The order of your results doesn't matter.
+Table: rental 
+
+
+   col_name   | col_type
+--------------+--------------------------
+ rental_id    | integer
+ rental_ts    | timestamp with time zone
+ inventory_id | integer
+ customer_id  | smallint
+ return_ts    | timestamp with time zone
+ staff_id     | smallint
+
+Sample results
+
+
+ year | mon | uu_cnt
+------+-----+--------
+ 2020 |   1 |    123
+ 2020 |   2 |    456
+ 2020 |   3 |    789
+
+Expected results
+
+year	mon	uu_cnt
+2020	2	158
+2020	5	514
+2020	6	591
+2020	7	599
+2020	8	599
+
+
+
+
+
+
+/*
+1. For data safety, only SELECT statements are allowed
+2. Results have been capped at 200 rows
+*/
+
+
+select extract(year from rental_ts) as year,extract(month from rental_ts) as month,
+ count(distinct customer_id)  as uu_cnt
+from rental
+group by month,year;
